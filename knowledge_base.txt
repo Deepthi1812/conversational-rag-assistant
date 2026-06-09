@@ -1,0 +1,13 @@
+RAG stands for Retrieval Augmented Generation.
+
+Retrieval Augmented Generation combines information retrieval with Large Language Models.
+
+Embeddings convert text into numerical vectors.
+
+FAISS is a vector database used for similarity search.
+
+LangChain helps build LLM-powered applications.
+
+History-aware retrieval converts follow-up questions into standalone questions.
+
+Tool calling allows LLMs to use external functions.
