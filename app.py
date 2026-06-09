@@ -9,18 +9,14 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from tools import get_current_time
 
 
-# ====================================
-# LOAD LOCAL LLM
-# ====================================
+
 
 llm = ChatOllama(
     model="llama3",
     temperature=0
 )
 
-# ====================================
-# LOAD KNOWLEDGE BASE
-# ====================================
+
 
 with open(
     "knowledge_base.txt",
@@ -30,9 +26,8 @@ with open(
 
     text = f.read()
 
-# ====================================
-# SPLIT DOCUMENTS
-# ====================================
+
+
 
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=500,
@@ -41,32 +36,24 @@ splitter = RecursiveCharacterTextSplitter(
 
 chunks = splitter.split_text(text)
 
-# ====================================
-# EMBEDDINGS
-# ====================================
+
+
 
 embedding_model = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-# ====================================
-# FAISS
-# ====================================
+
 
 vectorstore = FAISS.from_texts(
     chunks,
     embedding_model
 )
 
-# ====================================
-# MEMORY
-# ====================================
+
 
 chat_history = []
 
-# ====================================
-# HISTORY AWARE REWRITE
-# ====================================
 
 def rewrite_question(user_question):
 
@@ -100,9 +87,6 @@ Return ONLY the rewritten question.
 
     return response.content.strip()
 
-# ====================================
-# RETRIEVE CONTEXT
-# ====================================
 
 def retrieve_context(question):
 
@@ -123,9 +107,6 @@ def retrieve_context(question):
 
     return context, best_score
 
-# ====================================
-# TOOL ROUTER
-# ====================================
 
 def needs_tool(question):
 
@@ -144,10 +125,6 @@ def needs_tool(question):
 
     return False
 
-# ====================================
-# CHAT LOOP
-# ====================================
-
 print("\n======================")
 print("Conversational RAG")
 print("======================\n")
@@ -159,10 +136,6 @@ while True:
     if user_question.lower() == "exit":
         break
 
-    # -------------------------------
-    # Rewrite
-    # -------------------------------
-
     standalone_question = rewrite_question(
         user_question
     )
@@ -172,17 +145,10 @@ while True:
         standalone_question
     )
 
-    # -------------------------------
-    # Retrieval
-    # -------------------------------
 
     context, score = retrieve_context(
         standalone_question
     )
-
-    # -------------------------------
-    # Routing
-    # -------------------------------
 
     if score < 1.0:
 
